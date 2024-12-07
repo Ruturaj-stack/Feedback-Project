@@ -1,0 +1,471 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Teacher's Feedback Form
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+   .btn {
+            background-color: #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #555;
+            transform: scale(1.05);
+        }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const feedbackList = document.getElementById('feedback-list');
+    
+    // Update logic for displaying feedback for "Mam" user
+    document.querySelector('a[href="#feedback"]').addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default link behavior
+
+        // Check if the current user is "Mam"
+        if (localStorage.getItem('currentUsername') === 'Mam') {
+            // Clear the existing feedback list
+            feedbackList.innerHTML = '';
+
+            // Fetch feedbacks from localStorage
+            const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+
+            // Display all feedbacks
+            storedFeedbacks.forEach((feedback) => {
+                const feedbackItem = document.createElement('div');
+                feedbackItem.classList.add('border-b', 'pb-4');
+                feedbackItem.innerHTML = `
+                    <p class="text-sm text-gray-600">${feedback.anonymous ? 'Anonymous' : feedback.role}</p>
+                    <p class="text-lg font-semibold">${feedback.anonymous ? 'Anonymous' : feedback.name}</p>
+                    <p class="text-sm text-gray-600">Teacher: ${feedback.teacher}</p>
+                    <p class="text-gray-700">${feedback.text}</p>
+                `;
+                feedbackList.appendChild(feedbackItem);
+            });
+        }
+    });
+});
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const feedbackList = document.getElementById('feedback-list');
+    
+    // Update logic for displaying feedback for "Mam" user
+    document.querySelector('a[href="#feedback"]').addEventListener('click', (event) => {
+        if (localStorage.getItem('currentUsername') === 'Mam') {
+            // Clear existing feedback list
+            feedbackList.innerHTML = '';
+
+            // Fetch feedbacks from local storage
+            const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+
+            // Display all stored feedback
+            storedFeedbacks.forEach((feedback) => {
+                const feedbackItem = document.createElement('div');
+                feedbackItem.classList.add('border-b', 'pb-4');
+                feedbackItem.innerHTML = `
+                    <p class="text-sm text-gray-600">${feedback.anonymous ? 'Anonymous' : feedback.role}</p>
+                    <p class="text-lg font-semibold">${feedback.anonymous ? 'Anonymous' : feedback.name}</p>
+                    <p class="text-sm text-gray-600">Teacher: ${feedback.teacher}</p>
+                    <p class="text-gray-700">${feedback.text}</p>
+                `;
+                feedbackList.appendChild(feedbackItem);
+            });
+        }
+    });
+
+    // Storing feedback data in local storage
+    const form = document.getElementById('feedback-form');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const role = document.getElementById('role').value;
+        const name = document.getElementById('name').value;
+        const teacher = document.getElementById('teacher').value;
+        const feedbackText = document.getElementById('feedback').value;
+        const anonymous = document.getElementById('anonymous').checked;
+
+        const newFeedback = { role, name, teacher, text: feedbackText, anonymous };
+        const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+        storedFeedbacks.push(newFeedback);
+
+        localStorage.setItem('feedbacks', JSON.stringify(storedFeedbacks));
+
+        alert('Feedback submitted successfully.');
+        form.reset();
+    });
+});
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('feedback-form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const role = document.getElementById('role').value;
+            const name = document.getElementById('name').value;
+            const teacher = document.getElementById('teacher').value;
+            const feedback = document.getElementById('feedback').value;
+            const anonymous = document.getElementById('anonymous').checked;
+
+            const feedbackList = document.getElementById('feedback-list');
+            const feedbackItem = document.createElement('div');
+            feedbackItem.classList.add('border-b', 'pb-4');
+            feedbackItem.innerHTML = `
+                <p class="text-sm text-gray-600">${anonymous ? 'Anonymous' : role}</p>
+                <p class="text-lg font-semibold">${anonymous ? 'Anonymous' : name}</p>
+                <p class="text-sm text-gray-600">Teacher: ${teacher}</p>
+                <p class="text-gray-700">${feedback}</p>
+            `;
+            feedbackList.appendChild(feedbackItem);
+
+            form.reset();
+        });
+
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetPage = link.getAttribute('href').substring(1);
+                document.querySelectorAll('main > section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                document.getElementById(targetPage).classList.remove('hidden');
+            });
+        });
+
+        document.getElementById('login-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            const storedUsername = localStorage.getItem('username');
+            const storedPassword = localStorage.getItem('password');
+            if ((username === storedUsername && password === storedPassword) || (username === 'Mam' && password === '123')) {
+                alert('Login successful');
+                document.getElementById('login').classList.add('hidden');
+                if (username === 'Mam' && password === '123') {
+                    document.getElementById('home').classList.remove('hidden'); // Show home page
+                } else {
+                    document.getElementById('home').classList.remove('hidden');
+                    document.getElementById('profile-username').textContent = username;
+                    document.getElementById('profile-email').textContent = `${username}@example.com`;
+                    document.getElementById('profile-name').value = username;
+                }
+            } else {
+                alert('Invalid credentials');
+            }
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            alert('Signup successful. You can now login.');
+            document.getElementById('signup').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+        });
+
+        document.getElementById('signup-link').addEventListener('click', (event) => {
+            event.preventDefault();
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('signup').classList.remove('hidden');
+        });
+
+        document.getElementById('update-profile-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const profileName = document.getElementById('profile-name').value;
+            const profileRole = document.getElementById('profile-role').value;
+            const profileImage = document.getElementById('profile-image').files[0];
+            if (profileImage) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profile-picture').src = e.target.result;
+                };
+                reader.readAsDataURL(profileImage);
+            }
+            alert('Profile updated successfully');
+        });
+
+        if (!localStorage.getItem('username') || !localStorage.getItem('password')) {
+            document.getElementById('login').classList.remove('hidden');
+        } else {
+            document.getElementById('home').classList.remove('hidden');
+            const username = localStorage.getItem('username');
+            document.getElementById('profile-username').textContent = username;
+            document.getElementById('profile-email').textContent = `${username}@example.com`;
+            document.getElementById('profile-name').value = username;
+        }
+    });
+</script>
+ </head>
+ <body class="bg-gray-100 font-roboto">
+  <div class="min-h-screen flex flex-col">
+   <header class="bg-blue-600 text-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+     <h1 class="text-2xl font-bold">
+      Teacher's Feedback Form
+     </h1>
+     <nav>
+      <ul class="flex space-x-4">
+       <li>
+        <a class="hover:underline" href="#home">
+         Home
+        </a>
+       </li>
+       <li>
+        <a class="hover:underline" href="#profiles">
+         Profiles
+        </a>
+       </li>
+       <li>
+        <a class="hover:underline" href="#feedback">
+         Feedback
+        </a>
+       </li>
+       <li>
+        <a class="hover:underline" href="#reports">
+         Reports
+        </a>
+       </li>
+       <li>
+        <a class="hover:underline" href="#login">
+         Login
+        </a>
+       </li>
+       <li>
+        <a class="hover:underline" href="#signup">
+         Sign Up
+        </a>
+       </li>
+      </ul>
+     </nav>
+    </div>
+   </header>
+   <main class="flex-grow container mx-auto p-4">
+    <section class="hidden" id="home">
+     <div class="relative">
+      <img alt="A classroom with students and a teacher, desks arranged in rows, and a whiteboard at the front" class="w-full h-64 object-cover rounded-lg shadow-lg" height="400" src="https://storage.googleapis.com/a1aa/image/KrNqDDgDcfTzLCYdkfuOUJVSiRgbxPG3Cerqloea21h2VydPB.jpg" width="1200"/>
+      <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+       <h2 class="text-white text-3xl font-bold">
+        Welcome to the Feedback Portal
+       </h2>
+      </div>
+     </div>
+     <section class="mt-8" id="feedback">
+      <h3 class="text-xl font-bold mb-4">
+       Submit Feedback
+      </h3>
+      <form class="bg-white p-6 rounded-lg shadow-lg space-y-4" id="feedback-form">
+       <div>
+        <label class="block text-sm font-medium text-gray-700" for="role">
+         Role
+        </label>
+        <select class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="role" name="role">
+         <option>
+          Student
+         </option>
+         <option>
+          Teacher
+         </option>
+        </select>
+       </div>
+       <div>
+        <label class="block text-sm font-medium text-gray-700" for="name">
+         Name
+        </label>
+        <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="name" name="name" type="text"/>
+       </div>
+       <div>
+        <label class="block text-sm font-medium text-gray-700" for="teacher">
+         Teacher's Name
+        </label>
+        <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="teacher" name="teacher" type="text"/>
+       </div>
+       <div>
+        <label class="block text-sm font-medium text-gray-700" for="feedback">
+         Feedback
+        </label>
+        <textarea class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="feedback" name="feedback" rows="4"></textarea>
+       </div>
+       <div class="flex items-center">
+        <input class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" id="anonymous" name="anonymous" type="checkbox"/>
+        <label class="ml-2 block text-sm text-gray-900" for="anonymous">
+         Submit as anonymous
+        </label>
+       </div>
+       <button class="btn w-full" type="submit">
+        Submit Feedback
+       </button>
+      </form>
+     </section>
+    </section>
+    <section class="hidden" id="profiles">
+     <h3 class="text-xl font-bold mb-4">
+      Profile
+     </h3>
+     <form class="bg-white p-6 rounded-lg shadow-lg space-y-4" id="update-profile-form">
+      <div class="flex items-center space-x-4">
+       <img alt="Profile picture of the user" class="w-16 h-16 rounded-full" height="100" id="profile-picture" src="https://storage.googleapis.com/a1aa/image/PuQNiN9GncoTI5S38AMyF3EUCcFxt2o4BBKuXII4gZ4aK39E.jpg" width="100"/>
+       <div>
+        <h4 class="text-lg font-semibold" id="profile-username">
+         Username
+        </h4>
+        <p class="text-gray-600" id="profile-email">
+         user@example.com
+        </p>
+       </div>
+      </div>
+      <div>
+       <label class="block text-sm font-medium text-gray-700" for="profile-image">
+        Profile Image
+       </label>
+       <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="profile-image" name="profile-image" type="file" accept="image/*"/>
+      </div>
+      <div>
+       <label class="block text-sm font-medium text-gray-700" for="profile-name">
+        Name
+       </label>
+       <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="profile-name" name="profile-name" type="text" value="Admin"/>
+      </div>
+      <div>
+       <label class="block text-sm font-medium text-gray-700" for="profile-role">
+        Role
+       </label>
+       <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="profile-role" name="profile-role" type="text" value="Admin"/>
+      </div>
+      <button class="btn w-full" type="submit">
+       Update Profile
+      </button>
+     </form>
+    </section>
+    <section class="hidden" id="reports">
+     <h3 class="text-xl font-bold mb-4">
+      Feedback Reports
+     </h3>
+     <div class="bg-white p-6 rounded-lg shadow-lg space-y-4">
+      <p class="text-gray-700">
+       Here you can view and generate reports based on the feedback received.
+      </p>
+      <button class="btn w-full">
+       Generate Report
+      </button>
+     </div>
+    </section>
+    <section id="login">
+     <h3 class="text-xl font-bold mb-4">
+      Login
+     </h3>
+     <form class="bg-white p-6 rounded-lg shadow-lg space-y-4" id="login-form">
+      <div>
+       <label class="block text-sm font-medium text-gray-700" for="login-username">
+        Username
+       </label>
+       <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="login-username" name="username" type="text"/>
+      </div>
+      <div>
+       <label class="block text-sm font-medium text-gray-700" for="login-password">
+        Password
+       </label>
+       <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="login-password" name="password" type="password"/>
+      </div>
+      <button class="btn w-full" type="submit">
+       Login
+      </button>
+      <p class="text-center mt-4">
+       Don't have an account? 
+       <a class="text-blue-600 hover:underline" href="#signup" id="signup-link">
+        Sign Up
+       </a>
+      </p>
+     </form>
+    </section>
+    <section class="hidden" id="signup">
+     <h3 class="text-xl font-bold mb-4">
+      Sign Up
+     </h3>
+     <form class="bg-white p-6 rounded-lg shadow-lg space-y-4" id="signup-form">
+      <div>
+       <label class="block text-sm font-medium text-gray-700" for="signup-username">
+        Username
+       </label>
+       <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="signup-username" name="username" type="text"/>
+      </div>
+      <div>
+       <label class="block text-sm font-medium text-gray-700" for="signup-password">
+        Password
+       </label>
+       <input class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" id="signup-password" name="password" type="password"/>
+      </div>
+      <button class="btn w-full" type="submit">
+       Sign Up
+      </button>
+     </form>
+    </section>
+    <section class="hidden" id="teacher-reviews">
+     <h3 class="text-xl font-bold mb-4">
+      All Reviews
+     </h3>
+     <div class="bg-white p-6 rounded-lg shadow-lg space-y-4" id="feedback-list">
+      <div class="border-b pb-4">
+       <p class="text-sm text-gray-600">
+        Student
+       </p>
+       <p class="text-lg font-semibold">
+        John Doe
+       </p>
+       <p class="text-sm text-gray-600">
+        Teacher: Mr. Smith
+       </p>
+       <p class="text-gray-700">
+        The teacher was very helpful and explained the concepts clearly.
+       </p>
+      </div>
+      <div class="border-b pb-4">
+       <p class="text-sm text-gray-600">
+        Anonymous
+       </p>
+       <p class="text-lg font-semibold">
+        Anonymous
+       </p>
+       <p class="text-sm text-gray-600">
+        Teacher: Ms. Johnson
+       </p>
+       <p class="text-gray-700">
+        Great class, but the pace was a bit too fast.
+       </p>
+      </div>
+      <div class="border-b pb-4">
+       <p class="text-sm text-gray-600">
+        Teacher
+       </p>
+       <p class="text-lg font-semibold">
+        Jane Smith
+       </p>
+       <p class="text-sm text-gray-600">
+        Teacher: Mr. Brown
+       </p>
+       <p class="text-gray-700">
+        The students were very engaged and asked insightful questions.
+       </p>
+      </div>
+     </div>
+    </section>
+   </main>
+   <footer class="bg-blue-600 text-white p-4 shadow-md">
+    <div class="container mx-auto text-center">
+     <p>
+      © 2023 Teacher's Feedback Form. All rights reserved.
+     </p>
+    </div>
+   </footer>
+  </div>
+ </body>
+</html>
