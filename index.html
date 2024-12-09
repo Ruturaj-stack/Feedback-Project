@@ -24,187 +24,107 @@
         }
   </style>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-    const feedbackList = document.getElementById('feedback-list');
-    
-    // Update logic for displaying feedback for "Mam" user
-    document.querySelector('a[href="#feedback"]').addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default link behavior
-
-        // Check if the current user is "Mam"
-        if (localStorage.getItem('currentUsername') === 'Mam') {
-            // Clear the existing feedback list
-            feedbackList.innerHTML = '';
-
-            // Fetch feedbacks from localStorage
-            const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-
-            // Display all feedbacks
-            storedFeedbacks.forEach((feedback) => {
-                const feedbackItem = document.createElement('div');
-                feedbackItem.classList.add('border-b', 'pb-4');
-                feedbackItem.innerHTML = `
-                    <p class="text-sm text-gray-600">${feedback.anonymous ? 'Anonymous' : feedback.role}</p>
-                    <p class="text-lg font-semibold">${feedback.anonymous ? 'Anonymous' : feedback.name}</p>
-                    <p class="text-sm text-gray-600">Teacher: ${feedback.teacher}</p>
-                    <p class="text-gray-700">${feedback.text}</p>
-                `;
-                feedbackList.appendChild(feedbackItem);
-            });
-        }
-    });
-});
-
-    document.addEventListener('DOMContentLoaded', () => {
-    const feedbackList = document.getElementById('feedback-list');
-    
-    // Update logic for displaying feedback for "Mam" user
-    document.querySelector('a[href="#feedback"]').addEventListener('click', (event) => {
-        if (localStorage.getItem('currentUsername') === 'Mam') {
-            // Clear existing feedback list
-            feedbackList.innerHTML = '';
-
-            // Fetch feedbacks from local storage
-            const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-
-            // Display all stored feedback
-            storedFeedbacks.forEach((feedback) => {
-                const feedbackItem = document.createElement('div');
-                feedbackItem.classList.add('border-b', 'pb-4');
-                feedbackItem.innerHTML = `
-                    <p class="text-sm text-gray-600">${feedback.anonymous ? 'Anonymous' : feedback.role}</p>
-                    <p class="text-lg font-semibold">${feedback.anonymous ? 'Anonymous' : feedback.name}</p>
-                    <p class="text-sm text-gray-600">Teacher: ${feedback.teacher}</p>
-                    <p class="text-gray-700">${feedback.text}</p>
-                `;
-                feedbackList.appendChild(feedbackItem);
-            });
-        }
-    });
-
-    // Storing feedback data in local storage
-    const form = document.getElementById('feedback-form');
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const role = document.getElementById('role').value;
-        const name = document.getElementById('name').value;
-        const teacher = document.getElementById('teacher').value;
-        const feedbackText = document.getElementById('feedback').value;
-        const anonymous = document.getElementById('anonymous').checked;
-
-        const newFeedback = { role, name, teacher, text: feedbackText, anonymous };
-        const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-        storedFeedbacks.push(newFeedback);
-
-        localStorage.setItem('feedbacks', JSON.stringify(storedFeedbacks));
-
-        alert('Feedback submitted successfully.');
-        form.reset();
-    });
-});
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('feedback-form');
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const role = document.getElementById('role').value;
-            const name = document.getElementById('name').value;
-            const teacher = document.getElementById('teacher').value;
-            const feedback = document.getElementById('feedback').value;
-            const anonymous = document.getElementById('anonymous').checked;
-
-            const feedbackList = document.getElementById('feedback-list');
-            const feedbackItem = document.createElement('div');
-            feedbackItem.classList.add('border-b', 'pb-4');
-            feedbackItem.innerHTML = `
-                <p class="text-sm text-gray-600">${anonymous ? 'Anonymous' : role}</p>
-                <p class="text-lg font-semibold">${anonymous ? 'Anonymous' : name}</p>
-                <p class="text-sm text-gray-600">Teacher: ${teacher}</p>
-                <p class="text-gray-700">${feedback}</p>
-            `;
-            feedbackList.appendChild(feedbackItem);
-
-            form.reset();
-        });
-
-        const navLinks = document.querySelectorAll('nav a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (event) => {
+   document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('feedback-form');
+            form.addEventListener('submit', (event) => {
                 event.preventDefault();
-                const targetPage = link.getAttribute('href').substring(1);
-                document.querySelectorAll('main > section').forEach(section => {
-                    section.classList.add('hidden');
-                });
-                document.getElementById(targetPage).classList.remove('hidden');
+                const role = document.getElementById('role').value;
+                const name = document.getElementById('name').value;
+                const teacher = document.getElementById('teacher').value;
+                const feedback = document.getElementById('feedback').value;
+                const anonymous = document.getElementById('anonymous').checked;
+
+                const feedbackList = document.getElementById('feedback-list');
+                const feedbackItem = document.createElement('div');
+                feedbackItem.classList.add('border-b', 'pb-4');
+                feedbackItem.innerHTML = `
+                    <p class="text-sm text-gray-600">${anonymous ? 'Anonymous' : role}</p>
+                    <p class="text-lg font-semibold">${anonymous ? 'Anonymous' : name}</p>
+                    <p class="text-sm text-gray-600">Teacher: ${teacher}</p>
+                    <p class="text-gray-700">${feedback}</p>
+                `;
+                feedbackList.appendChild(feedbackItem);
+
+                form.reset();
             });
-        });
 
-        document.getElementById('login-form').addEventListener('submit', (event) => {
-            event.preventDefault();
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-            const storedUsername = localStorage.getItem('username');
-            const storedPassword = localStorage.getItem('password');
-            if ((username === storedUsername && password === storedPassword) || (username === 'Mam' && password === '123')) {
-                alert('Login successful');
-                document.getElementById('login').classList.add('hidden');
-                if (username === 'Mam' && password === '123') {
-                    document.getElementById('home').classList.remove('hidden'); // Show home page
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const targetPage = link.getAttribute('href').substring(1);
+                    document.querySelectorAll('main > section').forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(targetPage).classList.remove('hidden');
+                });
+            });
+
+            document.getElementById('login-form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+                const storedUsername = localStorage.getItem('username');
+                const storedPassword = localStorage.getItem('password');
+                if ((username === storedUsername && password === storedPassword) || (username === 'Mam' && password === '123')) {
+                    alert('Login successful');
+                    document.getElementById('login').classList.add('hidden');
+                    if (username === 'Mam' && password === '123') {
+                        document.getElementById('teacher-reviews').classList.remove('hidden');
+                    } else {
+                        document.getElementById('home').classList.remove('hidden');
+                        document.getElementById('profile-username').textContent = username;
+                        document.getElementById('profile-email').textContent = $;{username}example.com;
+                        document.getElementById('profile-name').value = username;
+                    }
                 } else {
-                    document.getElementById('home').classList.remove('hidden');
-                    document.getElementById('profile-username').textContent = username;
-                    document.getElementById('profile-email').textContent = `${username}@example.com`;
-                    document.getElementById('profile-name').value = username;
+                    alert('Invalid credentials');
                 }
+            });
+
+            document.getElementById('signup-form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const username = document.getElementById('signup-username').value;
+                const password = document.getElementById('signup-password').value;
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                alert('Signup successful. You can now login.');
+                document.getElementById('signup').classList.add('hidden');
+                document.getElementById('login').classList.remove('hidden');
+            });
+
+            document.getElementById('signup-link').addEventListener('click', (event) => {
+                event.preventDefault();
+                document.getElementById('login').classList.add('hidden');
+                document.getElementById('signup').classList.remove('hidden');
+            });
+
+            document.getElementById('update-profile-form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const profileName = document.getElementById('profile-name').value;
+                const profileRole = document.getElementById('profile-role').value;
+                const profileImage = document.getElementById('profile-image').files[0];
+                if (profileImage) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('profile-picture').src = e.target.result;
+                    };
+                    reader.readAsDataURL(profileImage);
+                }
+                alert('Profile updated successfully');
+            });
+
+            if (!localStorage.getItem('username') || !localStorage.getItem('password')) {
+                document.getElementById('login').classList.remove('hidden');
             } else {
-                alert('Invalid credentials');
+                document.getElementById('home').classList.remove('hidden');
+                const username = localStorage.getItem('username');
+                document.getElementById('profile-username').textContent = username;
+                document.getElementById('profile-email').textContent = $;{username}example.com;
+                document.getElementById('profile-name').value = username;
             }
         });
-
-        document.getElementById('signup-form').addEventListener('submit', (event) => {
-            event.preventDefault();
-            const username = document.getElementById('signup-username').value;
-            const password = document.getElementById('signup-password').value;
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password);
-            alert('Signup successful. You can now login.');
-            document.getElementById('signup').classList.add('hidden');
-            document.getElementById('login').classList.remove('hidden');
-        });
-
-        document.getElementById('signup-link').addEventListener('click', (event) => {
-            event.preventDefault();
-            document.getElementById('login').classList.add('hidden');
-            document.getElementById('signup').classList.remove('hidden');
-        });
-
-        document.getElementById('update-profile-form').addEventListener('submit', (event) => {
-            event.preventDefault();
-            const profileName = document.getElementById('profile-name').value;
-            const profileRole = document.getElementById('profile-role').value;
-            const profileImage = document.getElementById('profile-image').files[0];
-            if (profileImage) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('profile-picture').src = e.target.result;
-                };
-                reader.readAsDataURL(profileImage);
-            }
-            alert('Profile updated successfully');
-        });
-
-        if (!localStorage.getItem('username') || !localStorage.getItem('password')) {
-            document.getElementById('login').classList.remove('hidden');
-        } else {
-            document.getElementById('home').classList.remove('hidden');
-            const username = localStorage.getItem('username');
-            document.getElementById('profile-username').textContent = username;
-            document.getElementById('profile-email').textContent = `${username}@example.com`;
-            document.getElementById('profile-name').value = username;
-        }
-    });
-</script>
+  </script>
  </head>
  <body class="bg-gray-100 font-roboto">
   <div class="min-h-screen flex flex-col">
